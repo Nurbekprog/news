@@ -1,7 +1,45 @@
 import { Link } from "react-router-dom";
-
+import { useEffect, useState } from "react";
 import "./Header.scss";
+import axios from "axios";
 const Header = () => {
+  const [posts, setPosts] = useState([]);
+  const [filter, setFilter] = useState("All");
+  const [filteredPosts, setFilteredPosts] = useState(posts);
+
+  const fetchNews = async () => {
+    try {
+      const res = await axios.get("http://localhost:3000/posts");
+      const data = await res.data;
+      setPosts(data);
+      console.log(data);
+    } catch (error) {
+    } finally {
+    }
+  };
+
+  const handlePostsSearch = (e) => {
+    const text = e.target.value.trim().toLowerCase();
+    setFilteredPosts(
+      posts.filter((post) => post.title.toLowerCase().includes(text))
+    );
+  };
+
+  const handleFilter = (e) => {
+    setFilter(e.target.value);
+    const filter = e.target.value;
+    if (filter === "All") {
+      setFilteredPosts(posts);
+    } else {
+      setFilteredPosts(posts.filter((post) => post.category === filter));
+    }
+  };
+  useEffect(() => {
+    setFilteredPosts(posts);
+  }, [posts]);
+  useEffect(() => {
+    fetchNews();
+  }, []);
   return (
     <div className="home">
       <div className="nav">
@@ -32,152 +70,43 @@ const Header = () => {
           </Link>
         </div>
       </div>
-      <h2 className="container h2">Our Latest Posts</h2>
+      <div className="container posts-head">
+        <h2 className="h2">Our Latest Posts</h2>
+        <input
+          type="text"
+          placeholder="Search..."
+          className="posts-head-search"
+          onChange={handlePostsSearch}
+        />
+        <select
+          name="filter"
+          id="filter"
+          value={filter}
+          onChange={handleFilter}
+          className="posts-head-filter"
+        >
+          <option value="All">All</option>
+          <option value="science">Science</option>
+          <option value="innovation">Innovation</option>
+          <option value="industry">Industry</option>
+        </select>
+      </div>
       <div className="cards container">
-        <Link to={"/more"}>
-          <div className="cards-item">
-            <img
-              src={
-                "https://statikco.com/cdn/shop/files/02-SnapNCHargeGo_79569142-13d2-43a2-a685-0c92e4180fec_1800x.jpg?v=1700841664"
-              }
-              alt=""
-            />
-            <div className="category">Science</div>
-            <div className="cards-item-title">
-              <h5>
-                Charge Two Devices at the Same Time With This Magnetic Wireless
-                Charging Dock
-              </h5>
-              <p>Floyd Miles &nbsp;&nbsp;&nbsp;&nbsp; 3 Days Ago</p>
+        {posts.map((post) => (
+          <div key={post.id}>
+            <div className="cards-item">
+              <img src={post.image} alt="" />
+              <div className="category">{post.category}</div>
+              <div className="cards-item-title">
+                <h5>{post.title}</h5>
+                <p>Floyd Miles &nbsp;&nbsp;&nbsp;&nbsp; 3 Days Ago</p>
+                <Link to={`/posts/${post.id}`}>
+                  <button>See More...</button>
+                </Link>
+              </div>
             </div>
           </div>
-        </Link>
-        <Link to={"/more"}>
-          <div className="cards-item">
-            <img
-              src={
-                "https://statikco.com/cdn/shop/files/02-SnapNCHargeGo_79569142-13d2-43a2-a685-0c92e4180fec_1800x.jpg?v=1700841664"
-              }
-              alt=""
-            />
-            <div className="category">Science</div>
-            <div className="cards-item-title">
-              <h5>
-                Charge Two Devices at the Same Time With This Magnetic Wireless
-                Charging Dock
-              </h5>
-              <p>Floyd Miles &nbsp;&nbsp;&nbsp;&nbsp; 3 Days Ago</p>
-            </div>
-          </div>
-        </Link>
-        <Link to={"/more"}>
-          <div className="cards-item">
-            <img
-              src={
-                "https://statikco.com/cdn/shop/files/02-SnapNCHargeGo_79569142-13d2-43a2-a685-0c92e4180fec_1800x.jpg?v=1700841664"
-              }
-              alt=""
-            />
-            <div className="category">Science</div>
-            <div className="cards-item-title">
-              <h5>
-                Charge Two Devices at the Same Time With This Magnetic Wireless
-                Charging Dock
-              </h5>
-              <p>Floyd Miles &nbsp;&nbsp;&nbsp;&nbsp; 3 Days Ago</p>
-            </div>
-          </div>
-        </Link>
-        <Link to={"/more"}>
-          <div className="cards-item">
-            <img
-              src={
-                "https://statikco.com/cdn/shop/files/02-SnapNCHargeGo_79569142-13d2-43a2-a685-0c92e4180fec_1800x.jpg?v=1700841664"
-              }
-              alt=""
-            />
-            <div className="category">Science</div>
-            <div className="cards-item-title">
-              <h5>
-                Charge Two Devices at the Same Time With This Magnetic Wireless
-                Charging Dock
-              </h5>
-              <p>Floyd Miles &nbsp;&nbsp;&nbsp;&nbsp; 3 Days Ago</p>
-            </div>
-          </div>
-        </Link>
-        <Link to={"/more"}>
-          <div className="cards-item">
-            <img
-              src={
-                "https://statikco.com/cdn/shop/files/02-SnapNCHargeGo_79569142-13d2-43a2-a685-0c92e4180fec_1800x.jpg?v=1700841664"
-              }
-              alt=""
-            />
-            <div className="category">Science</div>
-            <div className="cards-item-title">
-              <h5>
-                Charge Two Devices at the Same Time With This Magnetic Wireless
-                Charging Dock
-              </h5>
-              <p>Floyd Miles &nbsp;&nbsp;&nbsp;&nbsp; 3 Days Ago</p>
-            </div>
-          </div>
-        </Link>
-        <Link to={"/more"}>
-          <div className="cards-item">
-            <img
-              src={
-                "https://statikco.com/cdn/shop/files/02-SnapNCHargeGo_79569142-13d2-43a2-a685-0c92e4180fec_1800x.jpg?v=1700841664"
-              }
-              alt=""
-            />
-            <div className="category">Science</div>
-            <div className="cards-item-title">
-              <h5>
-                Charge Two Devices at the Same Time With This Magnetic Wireless
-                Charging Dock
-              </h5>
-              <p>Floyd Miles &nbsp;&nbsp;&nbsp;&nbsp; 3 Days Ago</p>
-            </div>
-          </div>
-        </Link>
-        <Link to={"/more"}>
-          <div className="cards-item">
-            <img
-              src={
-                "https://statikco.com/cdn/shop/files/02-SnapNCHargeGo_79569142-13d2-43a2-a685-0c92e4180fec_1800x.jpg?v=1700841664"
-              }
-              alt=""
-            />
-            <div className="category">Science</div>
-            <div className="cards-item-title">
-              <h5>
-                Charge Two Devices at the Same Time With This Magnetic Wireless
-                Charging Dock
-              </h5>
-              <p>Floyd Miles &nbsp;&nbsp;&nbsp;&nbsp; 3 Days Ago</p>
-            </div>
-          </div>
-        </Link>
-        <Link to={"/more"}>
-          <div className="cards-item">
-            <img
-              src={
-                "https://statikco.com/cdn/shop/files/02-SnapNCHargeGo_79569142-13d2-43a2-a685-0c92e4180fec_1800x.jpg?v=1700841664"
-              }
-              alt=""
-            />
-            <div className="category">Science</div>
-            <div className="cards-item-title">
-              <h5>
-                Charge Two Devices at the Same Time With This Magnetic Wireless
-                Charging Dock
-              </h5>
-              <p>Floyd Miles &nbsp;&nbsp;&nbsp;&nbsp; 3 Days Ago</p>
-            </div>
-          </div>
-        </Link>
+        ))}
       </div>
     </div>
   );

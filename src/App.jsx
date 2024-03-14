@@ -1,13 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Header from "./components/header/Header";
-import More from "./components/more/More";
+import More from "./components/post/More";
 const App = () => {
   return (
     <Router>
       <Routes>
         <Route path="" element={<Header />} />
-        <Route path="/more" element={<More />} />
+        <Route path="/posts/:id" element={<More />} />
       </Routes>
     </Router>
   );

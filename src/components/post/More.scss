@@ -5,22 +5,23 @@
 }
 .more {
   &-top {
-    padding: 53px 0 48px 0;
+    padding: 96px 0 48px 0;
     &-btn {
       margin-bottom: 30px;
-      padding: 7px 10px;
-      background-color: red;
+      padding: 4px 10px;
+      background-color: transparent;
       border-radius: 8px;
-      border: 1px solid red;
       transition: all 0.6s;
+      border: 1px solid #ffffff;
       color: #ffffff;
       font-family: Mulish;
       font-weight: 700;
       font-size: 14px;
       line-height: 25px;
       &:hover {
-        background: transparent;
+        background: #0d85cb;
         border: 1px solid #ffffff;
+        opacity: 3333333333;
       }
     }
     & p {
