@@ -1,4 +1,5 @@
 import "./More.scss";
+import { Link } from "react-router-dom";
 const More = () => {
   return (
     <div>

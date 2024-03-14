@@ -12,7 +12,6 @@ const Header = () => {
       const res = await axios.get("http://localhost:3000/posts");
       const data = await res.data;
       setPosts(data);
-      console.log(data);
     } catch (error) {
     } finally {
     }
