@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import "./Header.scss";
+import "./Home.scss";
 import axios from "axios";
-const Header = () => {
+const Home = () => {
   const [posts, setPosts] = useState([]);
-  const [filter, setFilter] = useState("All");
   const [filteredPosts, setFilteredPosts] = useState(posts);
+  const [filter, setFilter] = useState("All");
 
   const fetchNews = async () => {
     try {
@@ -17,10 +17,11 @@ const Header = () => {
     }
   };
 
-  const handlePostsSearch = (e) => {
+  const handlePostSearch = (e) => {
     const text = e.target.value.trim().toLowerCase();
     setFilteredPosts(
-      posts.filter((post) => post.title.toLowerCase().includes(text))
+      posts.filter((post) => post.title.toLowerCase().includes(text)) &&
+        posts.filter((post) => post.category.toLowerCase().includes(text))
     );
   };
 
@@ -33,9 +34,11 @@ const Header = () => {
       setFilteredPosts(posts.filter((post) => post.category === filter));
     }
   };
+
   useEffect(() => {
     setFilteredPosts(posts);
   }, [posts]);
+
   useEffect(() => {
     fetchNews();
   }, []);
@@ -75,14 +78,14 @@ const Header = () => {
           type="text"
           placeholder="Search..."
           className="posts-head-search"
-          onChange={handlePostsSearch}
+          onChange={handlePostSearch}
         />
         <select
           name="filter"
           id="filter"
+          className="posts-head-filter"
           value={filter}
           onChange={handleFilter}
-          className="posts-head-filter"
         >
           <option value="All">All</option>
           <option value="science">Science</option>
@@ -91,7 +94,7 @@ const Header = () => {
         </select>
       </div>
       <div className="cards container">
-        {posts.map((post) => (
+        {filteredPosts.map((post) => (
           <div key={post.id}>
             <div className="cards-item">
               <img src={post.image} alt="" />
@@ -111,4 +114,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default Home;

@@ -1,6 +1,22 @@
+import { useEffect, useState } from "react";
 import "./More.scss";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 const More = () => {
+  const { id } = useParams();
+  const [post, setPost] = useState('');
+  const fetchPost = async (id) => {
+    try {
+      const res = await axios.get(`http://localhost:3000/posts/${id}`);
+      const data = await res.data;
+      setPost(data);
+    } catch (error) {
+    } finally {
+    }
+  };
+
+  useEffect(() => {
+    fetchPost(id);
+  }, [id]);
   return (
     <div>
       <div className="nav">
@@ -39,6 +55,7 @@ const More = () => {
               <button className="more-top-btn">Go back</button>
             </Link>
             <p>Published at 12.08.2023</p>
+            <img src={post.image} alt="" />
             <h1>
               Charge Two Devices at the Same Time With This Magnetic Wireless
               Charging Dock
