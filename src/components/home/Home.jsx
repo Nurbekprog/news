@@ -2,18 +2,26 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./Home.scss";
 import axios from "axios";
+import Loader from "../Loader";
+import Error from "../Error";
+
 const Home = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState(posts);
   const [filter, setFilter] = useState("All");
 
   const fetchNews = async () => {
+    setLoading(true);
     try {
       const res = await axios.get("http://localhost:3000/posts");
       const data = await res.data;
       setPosts(data);
     } catch (error) {
+      setError(error.messege);
     } finally {
+      setLoading(false);
     }
   };
 
@@ -93,6 +101,8 @@ const Home = () => {
           <option value="industry">Industry</option>
         </select>
       </div>
+      {loading && <Loader />}
+      {error && <Error />}
       <div className="cards container">
         {filteredPosts.map((post) => (
           <div key={post.id}>
