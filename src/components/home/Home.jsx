@@ -11,8 +11,7 @@ const Home = () => {
   const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState(posts);
   const [filter, setFilter] = useState("All");
-
-  const fetchNews = async () => {
+  const fetchNews = async (api) => {
     setLoading(true);
     try {
       const res = await axios.get("http://localhost:3000/posts");
@@ -40,6 +39,26 @@ const Home = () => {
       setFilteredPosts(posts);
     } else {
       setFilteredPosts(posts.filter((post) => post.category === filter));
+    }
+  };
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = posts.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => {
+    if (pageNumber === "next") {
+      setCurrentPage((prevPage) => {
+        const nextPage = prevPage + 1;
+        return nextPage > Math.ceil(data.length / itemsPerPage)
+          ? prevPage
+          : nextPage;
+      });
+    } else if (pageNumber === "prev") {
+      setCurrentPage(1);
+    } else {
+      setCurrentPage(pageNumber);
     }
   };
 
@@ -119,6 +138,45 @@ const Home = () => {
             </div>
           </div>
         ))}
+      </div>
+      <div className="page container">
+        <nav aria-label="Page navigation example">
+          <ul className="pagination">
+            <button className="page-item" disabled={currentPage <= 1}>
+              <a
+                className="page-link"
+                onClick={() => paginate(currentPage - 1)}
+                aria-label="Previous"
+              >
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </button>
+            {Array.from(
+              { length: Math.ceil(posts.length / itemsPerPage) },
+              (_, i) => (
+                <button
+                  key={i}
+                  className={`page-item ${
+                    currentPage === i + 1 ? "active" : ""
+                  }`}
+                >
+                  <a className="page-link" onClick={() => paginate(i + 1)}>
+                    {i + 1}
+                  </a>
+                </button>
+              )
+            )}
+            <li className="page-item">
+              <a
+                className="page-link"
+                onClick={() => paginate("next")}
+                aria-label="Next"
+              >
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
   );
